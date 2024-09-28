@@ -1,0 +1,38 @@
+<main class="flex flex-col gap-4 justify-center items-center">
+  <h1>Crear Nueva Tarea</h1>
+  <form
+    class="flex flex-col gap-4"
+    [formGroup]="taskForm()"
+    (ngSubmit)="onSubmit()"
+  >
+    <custom-input
+      [label]="'Task Name'"
+      [control]="$any(taskForm().get('taskName'))"
+      [type]="'text'"
+      [placeHolder]="'Pepito Perez Velaio'"
+      [errorMessage]="'Task Name is required'"
+    />
+
+    <custom-input
+      [label]="'Limit Date'"
+      [control]="$any(taskForm().get('limitDate'))"
+      [type]="'date'"
+      [placeHolder]="'dd/mm/aaaa'"
+      [errorMessage]="'Limit Date is required'"
+    />
+
+    <div formArrayName="associatedUsers"></div>
+
+    <button
+      class="px-2 py-1 min-w-6 rounded-lg"
+      [ngClass]="{
+        'bg-sky-600 ': taskForm().valid,
+        'bg-gray-400 ': !taskForm().valid
+      }"
+      type="submit"
+      [disabled]="!taskForm().valid"
+    >
+      Submit
+    </button>
+  </form>
+</main>

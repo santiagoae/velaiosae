@@ -1,0 +1,14 @@
+<main class="flex flex-col">
+  <label>{{ label() }}</label>
+
+  <input
+    class="border-2 border-sky-600 rounded-md p-2 text-black"
+    [type]="type()"
+    [placeholder]="placeHolder()"
+    [formControl]="control()"
+  />
+
+  @if(control().invalid && control().touched){
+  <small class="text-yellow-400 font-bold">{{ errorMessage() + "*" }}</small>
+  }
+</main>

@@ -5,9 +5,9 @@ import { ReactiveFormComponent } from './components/reactive-form/reactive-form.
   selector: 'app-crear-tarea',
   standalone: true,
   imports: [ReactiveFormComponent],
-  templateUrl: './crear-tarea.component.html',
-  styleUrl: './crear-tarea.component.scss'
+  templateUrl: './create-task.component.html',
+  styleUrl: './create-task.component.scss'
 })
-export class CrearTareaComponent {
+export class CreateTaskComponent {
 
 }

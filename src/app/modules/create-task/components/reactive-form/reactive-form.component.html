@@ -9,7 +9,7 @@
       [label]="'Task Name'"
       [control]="$any(taskForm().get('taskName'))"
       [type]="'text'"
-      [placeHolder]="'Pepito Perez Velaio'"
+      [placeHolder]="'requerimiento p...'"
       [errorMessage]="'Task Name is required'"
     />
 
@@ -21,7 +21,65 @@
       [errorMessage]="'Limit Date is required'"
     />
 
-    <div formArrayName="associatedUsers"></div>
+    <section formArrayName="associatedUsers">
+      <h2 class="text-center">Associated Users</h2>
+      <button
+        class="px-2 py-1 min-w-6 rounded-lg bg-sky-600 flex items-center justify-center gap-1 mb-6 w-full"
+        type="button"
+        (click)="onAddUser()"
+      >
+        <i class="fa-solid fa-user-plus text-xs"></i>
+        Add user
+      </button>
+
+      @for(associatedUser of getAssociatedUsersControl().controls; track $index;
+      let indx = $index ){
+      <article
+        [formGroupName]="indx"
+        class="border border-sky-100 rounded-lg p-4 mb-4"
+      >
+        <custom-input
+          [label]="'Username'"
+          [control]="$any(associatedUser.get('username'))"
+          [type]="'text'"
+          [placeHolder]="'Pepito Perez Velaio'"
+          [errorMessage]="'Username is required'"
+        />
+
+        <custom-input
+          [label]="'Age'"
+          [control]="$any(associatedUser.get('age'))"
+          [type]="'text'"
+          [placeHolder]="'29'"
+          [errorMessage]="'Age is required'"
+        />
+
+        <button
+          class="bg-sky-600 px-2 py-1 min-w-6 rounded-lg mt-4 mb-2 w-full text-center"
+        >
+          <i class="fa-solid fa-plus"></i> Add Skill
+        </button>
+
+        @for(skill of $any(associatedUser.get('skills')).controls; track $index
+        * 100; let jIndx = $index){
+        <div class="flex items-end justify-between gap-1">
+          <custom-input
+            [label]="'Skill: ' + (jIndx + 1)"
+            [control]="skill"
+            [type]="'text'"
+            [placeHolder]="'Excelente dev Frontend'"
+            [errorMessage]="'skill is required'"
+          />
+
+          <button class="bg-red-500 px-2 py-1 min-w-6 rounded-lg h-full">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+
+        }
+      </article>
+      }
+    </section>
 
     <button
       class="px-2 py-1 min-w-6 rounded-lg"
@@ -32,7 +90,7 @@
       type="submit"
       [disabled]="!taskForm().valid"
     >
-      Submit
+      Save Task
     </button>
   </form>
 </main>

@@ -18,7 +18,7 @@ export class ReactiveFormComponent  {
     associatedUsers: this.formBuilder.array([this.formBuilder.group({
       username: ['', Validators.required],
       age: ['', Validators.required],
-      skills: this.formBuilder.array([new FormControl('', [Validators.required])]),
+      skills: this.formBuilder.array([new FormControl('', [Validators.required, Validators.pattern(/^\S.*\S$|^\S$/)])]),
     })]),
   }));
   
@@ -37,7 +37,11 @@ export class ReactiveFormComponent  {
     this.getAssociatedUsersControl().push(new FormGroup({
       username: new FormControl('', [Validators.required]),
       age: new FormControl('', [Validators.required]),
-      skills: this.formBuilder.array([new FormControl('', [Validators.required])]),
+      skills: this.formBuilder.array([new FormControl('', [Validators.required, Validators.pattern(/^\S.*\S$|^\S$/)])]),
     }))
+  }
+
+  onDeleteUser(selectedId:number){
+    this.getAssociatedUsersControl().removeAt(selectedId);
   }
 }

@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
 import { CustomInputComponent } from '../custom-input/custom-input.component';
 import { NgClass } from '@angular/common';
+import { TaskService } from '../../services/task.service';
 
 @Component({
   selector: 'app-reactive-form',
@@ -22,9 +23,12 @@ export class ReactiveFormComponent  {
       age: ['', Validators.required],
       skills: this.formBuilder.array([new FormControl('', [Validators.required, Validators.pattern(/^\S.*\S$|^\S$/)])]),
     })]),
+    done: [false]
   }));
-  
+
+  private taskService = inject(TaskService);  
   // private formBuilder: FormBuilder = inject(FormBuilder)
+
   constructor(private formBuilder:FormBuilder ){} 
 
   getAssociatedUsersControl(){
@@ -58,7 +62,7 @@ export class ReactiveFormComponent  {
   onSubmit(){
     const isValid =this.validateFormBeforeSaveTask();
     if(isValid){
-      // enviar la tarea
+      this.taskService.saveTask(this.taskForm().value);
       this.taskForm().reset();
       this.successfulSaveMessage.set('Task saved successfully');
       setTimeout(() => {

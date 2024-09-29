@@ -95,6 +95,13 @@
       } }
     </section>
 
+    @if(validateWarningMessage()){
+    <span
+      class="w-full bg-yellow-500 text-black px-2 py-1 rounded-lg text-center font-bold"
+      >{{ validateWarningMessage() }}</span
+    >
+    }
+
     <button
       class="px-2 py-1 min-w-6 rounded-lg"
       [ngClass]="{
@@ -107,4 +114,10 @@
       Save Task
     </button>
   </form>
+  @if(successfulSaveMessage()){
+  <span
+    class="w-full bg-green-600 text-white px-2 py-1 rounded-lg text-center"
+    >{{ successfulSaveMessage() }}</span
+  >
+  }
 </main>

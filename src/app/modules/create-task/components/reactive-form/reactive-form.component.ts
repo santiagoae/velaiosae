@@ -12,6 +12,8 @@ import { NgClass } from '@angular/common';
 })
 export class ReactiveFormComponent  {  
   
+  validateWarningMessage = signal<string>('');
+  successfulSaveMessage = signal<string>('');
   taskForm = signal<FormGroup>(this.formBuilder.group({
     taskName: ['', Validators.required],
     limitDate: ['', Validators.required],
@@ -54,20 +56,45 @@ export class ReactiveFormComponent  {
   }
 
   onSubmit(){
-    this.validateFormBeforeSaveTask();
-    // this.taskForm().reset();
+    const isValid =this.validateFormBeforeSaveTask();
+    if(isValid){
+      // enviar la tarea
+      this.taskForm().reset();
+      this.successfulSaveMessage.set('Task saved successfully');
+      setTimeout(() => {
+        this.successfulSaveMessage.set('');
+      }, 3500);
+    }
   }
 
-  validateFormBeforeSaveTask(){
-    if(!this.taskForm().valid) return false;
+  validateFormBeforeSaveTask(): boolean{
+    this.validateWarningMessage.set('');
+    if(!this.taskForm().valid) {
+      this.validateWarningMessage.set('Task is not valid');
+      return false;
+    };
+
     const associatedUsers = this.getAssociatedUsersControl().controls;
-    console.log('form', this.taskForm().value);
-    
 
-    associatedUsers.forEach( (associatedUser, i) => {
-      console.log('associatedUser' + i, associatedUser.get('username')?.value);      
-    })
+    let lastAssociatedUser:string = ''
+    for(const associatedUser of associatedUsers ){
+      const controlName = associatedUser.get('username');
+      const controlAge = associatedUser.get('age');
+      if(String(controlName?.value).toLowerCase() === lastAssociatedUser) {
+        this.validateWarningMessage.set('No repetir el nombre de usuario');
+        controlName?.setErrors({ invalid: true });
+        break;
+      };
 
-    return true;
+      if(controlAge?.value < 18) {
+        this.validateWarningMessage.set('Debe tener la mayoria de edad');
+        controlAge?.setErrors({ invalid: true });
+        break;
+      }
+
+      lastAssociatedUser = String(controlName?.value).toLowerCase();
+    }
+
+    return this.taskForm().valid ? true : false;
   }
 }

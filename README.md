@@ -1,6 +1,8 @@
 # Descripcion
 
-Este proyecto es una aplicacion de gestion de tareas sencillas donde se muestra como trabajar con formularios reactivos, signals, localeStorage y servicios de angular para simular una aplicacion completa o fullstack.
+Este proyecto es una aplicación de gestión de tareas sencillas donde se muestra como trabajar con formularios reactivos (formcontrols, formgroups, formarrays), signals, localeStorage y servicios de angular para simular una aplicación completa o fullstack.
+
+Ademas hago uso de arquitecutra limpia como contenedores enfocada al scream achitecture, adicionando cleancode y principios SOLID.
 
 # Como instalar y ejecutar este proyecto
 

@@ -1,15 +1,7 @@
 <main class="flex flex-col gap-4 justify-center items-center">
-  <button
-    class="px-2 py-1 rounded-lg bg-sky-600 flex items-center justify-center gap-1 mb-12"
-    type="button"
-    (click)="backLink()"
-  >
-    <i class="fa-solid fa-arrow-left"></i>
-    Volver
-  </button>
   <h1>Crear Nueva Tarea</h1>
   <form
-    class="flex flex-col gap-4 w-full max-w-[600px]"
+    class="flex flex-col gap-4"
     [formGroup]="taskForm()"
     (ngSubmit)="onSubmit()"
   >
@@ -64,7 +56,6 @@
 
         <button
           class="bg-sky-600 px-2 py-1 min-w-6 rounded-lg mt-4 mb-2 w-full text-center"
-          type="button"
           (click)="onAddSkill(indx)"
         >
           <i class="fa-solid fa-plus"></i> Add Skill
@@ -72,19 +63,17 @@
 
         @for(skill of $any(associatedUser.get('skills')).controls; track $index
         * 100; let jIndx = $index){
-        <div class="flex items-end justify-between gap-2">
+        <div class="flex items-end justify-between gap-1">
           <custom-input
             [label]="'Skill: ' + (jIndx + 1)"
             [control]="skill"
             [type]="'text'"
             [placeHolder]="'Excelente dev Frontend'"
             [errorMessage]="'skill is required'"
-            class="w-full"
           />
           @if(getSkillsOfAssociatedUser(indx).length > 1 ){
           <button
             class="bg-red-500 px-2 py-1 min-w-6 rounded-lg h-full"
-            type="button"
             (click)="onDeleteSkill(indx, jIndx)"
           >
             <i class="fa-solid fa-trash-can"></i>

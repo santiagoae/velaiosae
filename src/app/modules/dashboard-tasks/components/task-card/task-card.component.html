@@ -1,0 +1,25 @@
+<main
+  class="flex flex-col justify-center items-center gap-y-2 p-4 rounded-lg shadow-lg min-h-60"
+>
+  <app-badge
+    class="mb-5"
+    [backgroundColor]="selectedTask()?.done ? 'bg-green-600' : 'bg-red-500'"
+    >{{ selectedTask()?.done ? "Completada" : "Pendiente" }}</app-badge
+  >
+  <header>
+    <h1 class="font-bold text-lg text-center whitespace-pre-line">
+      {{ selectedTask()?.taskName }} - {{ selectedTask()?.limitDate }}
+    </h1>
+  </header>
+
+  <section class="flex flex-col gap-y-2">
+    @for(user of selectedTask()?.associatedUsers; track $index){
+    <p>{{ user.username }} - {{ user.age }}</p>
+    <article class="flex gap-x-2 justify-center">
+      @for(skill of user.skills; track $index){
+      <app-badge backgroundColor="bg-sky-600">{{ skill }}</app-badge>
+      }
+    </article>
+    }
+  </section>
+</main>

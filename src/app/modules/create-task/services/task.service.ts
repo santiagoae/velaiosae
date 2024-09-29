@@ -14,16 +14,4 @@ export class TaskService {
   saveTask(task:ITask): void{
     localStorage.setItem('tasks', JSON.stringify([...this.getTasks(), task]));
   }
-
-  deleteTask(taskId:number){
-    const tasks = this.getTasks();
-    tasks.splice(taskId, 1);
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-  }
-
-  updateTask(taskId:number, task:ITask){
-    const tasks = this.getTasks();
-    tasks.splice(taskId, 1, task);
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-  }
 }

@@ -1,8 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
 import { CustomInputComponent } from '../custom-input/custom-input.component';
 import { NgClass } from '@angular/common';
 import { TaskService } from '../../services/task.service';
+import { ITask } from '../../interface/task.interface';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,8 +13,10 @@ import { Router } from '@angular/router';
   templateUrl: './reactive-form.component.html',
   styleUrl: './reactive-form.component.scss'
 })
-export class ReactiveFormComponent  {  
+export class ReactiveFormComponent implements OnInit {
   
+  taskId = input<number>(0);
+  selectedTask = signal<ITask | undefined>(undefined);
   validateWarningMessage = signal<string>('');
   successfulSaveMessage = signal<string>('');
   taskForm = signal<FormGroup>(this.formBuilder.group({
@@ -32,6 +35,11 @@ export class ReactiveFormComponent  {
   // private formBuilder: FormBuilder = inject(FormBuilder)
 
   constructor(private formBuilder:FormBuilder ){} 
+
+  ngOnInit(): void {
+    this.selectedTask.set(this.taskService.getTaskById(this.taskId()));
+    this.#fillForm(); 
+  }
 
   getAssociatedUsersControl(){
      return this.taskForm().get('associatedUsers') as FormArray;
@@ -64,11 +72,12 @@ export class ReactiveFormComponent  {
   onSubmit(){
     const isValid =this.validateFormBeforeSaveTask();
     if(isValid){
-      this.taskService.saveTask(this.taskForm().value);
+      this.taskService.updateTask(this.taskId(), this.taskForm().value);
       this.taskForm().reset();
       this.successfulSaveMessage.set('Task saved successfully');
       setTimeout(() => {
         this.successfulSaveMessage.set('');
+        this.router.navigate(['/dashboard-tasks']);
       }, 3500);
     }
   }
@@ -103,8 +112,18 @@ export class ReactiveFormComponent  {
 
     return this.taskForm().valid ? true : false;
   }
+  
 
-  backLink(){
-    this.router.navigate(['/dashboard-tasks']);
+  #fillForm(){
+    this.taskForm().get('taskName')?.setValue(this.selectedTask()?.taskName);
+    this.taskForm().get('limitDate')?.setValue(this.selectedTask()?.limitDate);    
+    this.taskForm().get('done')?.setValue(this.selectedTask()?.done);    
+    this.selectedTask()?.associatedUsers.forEach((user, associatedIndex) => {
+      this.getAssociatedUsersControl().at(associatedIndex).get('username')?.setValue(user.username);
+      this.getAssociatedUsersControl().at(associatedIndex).get('age')?.setValue(user.age);
+      user.skills.forEach((skill, index) => {
+        this.getSkillsOfAssociatedUser(associatedIndex).at(index).setValue(skill);
+      });
+    });
   }
 }

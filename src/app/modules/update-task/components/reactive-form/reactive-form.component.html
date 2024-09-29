@@ -1,7 +1,7 @@
 <main class="flex flex-col gap-4 justify-center items-center">
   <h1>Crear Nueva Tarea</h1>
   <form
-    class="flex flex-col gap-4"
+    class="flex flex-col gap-4 w-full max-w-[600px]"
     [formGroup]="taskForm()"
     (ngSubmit)="onSubmit()"
   >
@@ -70,6 +70,7 @@
             [type]="'text'"
             [placeHolder]="'Excelente dev Frontend'"
             [errorMessage]="'skill is required'"
+            class="w-full"
           />
           @if(getSkillsOfAssociatedUser(indx).length > 1 ){
           <button

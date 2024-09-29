@@ -29,9 +29,9 @@ export class ReactiveFormComponent  {
      return this.taskForm().get('associatedUsers') as FormArray;
   }
 
-  onSubmit(){
-
-  }
+  getSkillsOfAssociatedUser(associatedId:number){
+    return this.getAssociatedUsersControl().at(associatedId).get('skills') as FormArray;
+  }  
 
   onAddUser(){
     this.getAssociatedUsersControl().push(new FormGroup({
@@ -41,7 +41,33 @@ export class ReactiveFormComponent  {
     }))
   }
 
-  onDeleteUser(selectedId:number){
-    this.getAssociatedUsersControl().removeAt(selectedId);
+  onDeleteUser(associatedId:number){
+    this.getAssociatedUsersControl().removeAt(associatedId);
+  }
+
+  onAddSkill(associatedId:number){
+    this.getSkillsOfAssociatedUser(associatedId).push(new FormControl('', [Validators.required, Validators.pattern(/^\S.*\S$|^\S$/)])); 
+  }
+
+  onDeleteSkill(associatedId:number, skillId:number){
+    this.getSkillsOfAssociatedUser(associatedId).removeAt(skillId);
+  }
+
+  onSubmit(){
+    this.validateFormBeforeSaveTask();
+    // this.taskForm().reset();
+  }
+
+  validateFormBeforeSaveTask(){
+    if(!this.taskForm().valid) return false;
+    const associatedUsers = this.getAssociatedUsersControl().controls;
+    console.log('form', this.taskForm().value);
+    
+
+    associatedUsers.forEach( (associatedUser, i) => {
+      console.log('associatedUser' + i, associatedUser.get('username')?.value);      
+    })
+
+    return true;
   }
 }
